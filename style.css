@@ -1,0 +1,189 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: url(bg.jpg) center center no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}
+
+header {
+    height: 15vh;
+    margin: 20px 20px 40px;
+    text-align: center;
+}
+
+img {
+    height: 59%;
+}
+
+h1 {
+    font-family: 'Revalia', cursive;
+    color: #fff;
+    display: inline;
+    font-size: 60px;
+    margin: 0 50px;
+    vertical-align: top;
+}
+
+h2 {
+    text-align: center;
+    font-size: 32px;
+    font-family: 'Comfortaa', sans-serif;
+    color: #fff;
+}
+
+h3 {
+    text-align: center;
+    font-family: 'Comfortaa', cursive;
+    color: #000;
+    font-size: 30px;
+    margin: 20px 0;
+}
+
+h4 {
+    text-align: center;
+    font-family: 'Comfortaa', cursive;
+    color: #000;
+    font-size: 20px;
+}
+
+main {
+    height: 80vh;
+}
+
+.lists {
+    width: 90%;
+    height: 60%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+#listOfGames,
+#ranking {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #d00;
+    color: #000;
+    overflow-y: auto;
+}
+
+#listOfGames {
+    width: 58%;
+}
+
+#listOfGames tr {
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+}
+
+#listOfGames td {
+    padding: 5px 16px;
+}
+
+#ranking {
+    width: 38%;
+    counter-reset: rank;
+}
+
+#ranking th {
+    font-family: 'Comfortaa', cursive;
+}
+
+#ranking tbody tr:before {
+    counter-increment: rank;
+    content: counter(rank);
+    font-family: 'Comfortaa', cursive;
+    text-align: center;
+    font-size: 26px;
+    position: relative;
+    top: 10px;
+    left: 20px;
+}
+
+
+td.team1,
+td.team2,
+td.rankNames,
+td.score {
+    font-family: 'Comfortaa', cursive;
+    font-size: 26px;
+}
+
+td.team1 {
+    text-align: right;
+}
+
+td.team2 {
+    text-align: left;
+}
+
+td.versus {
+    color: #d00;
+    font-family: 'Chelsea Market', cursive;
+    font-size: 26px;
+}
+
+#results {
+    width: 100%;
+}
+
+td.score {
+    color: #d00;
+}
+
+tr.results {
+    font-family: 'Comfortaa', cursive;
+    font-size: 26px;
+}
+
+#listOfGames tr.results > td:first-of-type {
+    padding-left: 50px;
+}
+
+td.rankNames {
+    padding: 10px 20px;
+}
+
+.drawRandomGame {
+    background-color: #d00;
+    width: 320px;
+    padding: 18px 15px 15px;
+    margin: 40px auto 20px;
+    border: 2px solid #fff;
+    /*border-radius: 100px;*/
+    text-align: center;
+    color: #fff;
+    font-size: 32px;
+    font-weight: 700;
+    font-family: 'Comfortaa', sans-serif;
+    cursor: pointer;
+}
+
+.nextGame {margin-top: 20px;
+    text-align: center;
+    color: #fff;
+    font-size: 60px;
+    font-weight: 700;
+    font-family: 'Gruppo', sans-serif;
+}
+
+.result input[type='number'] {
+    width: 30px;
+    margin: 0 10px;
+    padding: 3px 0 2px;
+    font-size: 18px;
+    text-align: center;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.result input[type='submit'] {
+    padding: 5px;
+    margin: 0 10px;
+    font-size: 14px;
+}
