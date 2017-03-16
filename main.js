@@ -206,9 +206,12 @@ var updateRanking = function (e) {
     // $resultsTable.empty();
     if (wyniki.length){
         wyniki.forEach(function (meczyk) {
-    // 
+    //
     // var result1 = e.delegateTarget.cells[3].childNodes[0][0].valueAsNumber;
     // var result2 = e.delegateTarget.cells[3].childNodes[0][1].valueAsNumber;
+//
+//     var result1 = e.delegateTarget.cells[3].childNodes[0][0].valueAsNumber;
+//     var result2 = e.delegateTarget.cells[3].childNodes[0][1].valueAsNumber;
 //     var winner, loser;
 //     var winnerTeam = [];
 //     var loserTeam = [];
