@@ -1,3 +1,5 @@
+
+var wyniki = [];
 var createSeason = function() {
 
     var teams = [];
@@ -126,9 +128,34 @@ var createSeason = function() {
     createFixtures();
     displayFixtures();
     showRanking(players);
+
 };
 
+
+var updateResults = function () {
+    if (localStorage.getItem('wyniki')) {
+        wyniki = JSON.parse(localStorage.getItem('wyniki'))
+    }
+    var $resultsTable = $('#results');
+    $resultsTable.empty();
+    if (wyniki.length){
+        wyniki.forEach(function (meczyk) {
+            var $tr = $('<tr>');
+            var $td1 = $('<td>');
+            $td1.text(meczyk.team1 + " vs " + meczyk.team2);
+            $tr.append($td1);
+            var $td2 = $('<td>');
+            $td2.text(meczyk.team1Score + " : " + meczyk.team2Score);
+            $td2.addClass('score');
+            $tr.append($td2);
+            $tr.addClass('results');
+            $resultsTable.append($tr);
+        })
+    }
+}
+
 createSeason();
+updateResults();
 
 var $drawBtn = $('.drawRandomGame');
 var drawNextGame = function () {
@@ -143,25 +170,26 @@ var drawNextGame = function () {
 }
 
 var $fixtures = $('#fixtures tr');
+
 var submitMatchScore = function (e) {
-    console.log(e);
     var $row = e.delegateTarget;
-    var teams = $row.innerText;
+    var team1 = e.delegateTarget.cells[0].innerText;
+    var team2 = e.delegateTarget.cells[2].innerText;
     var team1Score = e.target[0].value;
     var team2Score = e.target[1].value;
-    var $resultsTable = $('#results');
-    var $tr = $('<tr>');
-    var $td1 = $('<td>');
-    $td1.text(teams);
-    $tr.append($td1);
-    var $td2 = $('<td>');
-    $td2.text(team1Score + " : " + team2Score);
-    $td2.addClass('score');
-    $tr.append($td2);
-    $tr.addClass('results');
-    $resultsTable.append($tr);
+    var meczyk = {};
+    var wyniki = localStorage.getItem('wyniki') ? JSON.parse(localStorage.getItem('wyniki')) : [];
+    meczyk.team1 = team1;
+    meczyk.team2 = team2;
+    meczyk.team1Score = team1Score;
+    meczyk.team2Score = team2Score;
+    wyniki.push(meczyk);
+    localStorage.setItem("wyniki", JSON.stringify(wyniki));
+    updateResults();
+    // updateRanking();
     $row.remove();
 };
+
 var updateRanking = function (e) {
     var sortRanking = function () {
         $(' #ranking tbody > tr').sort(function (a, b) {
@@ -174,73 +202,76 @@ var updateRanking = function (e) {
             return +$('td.wins', b).text() > +$('td.wins', a).text();
         }).appendTo('tbody')
     }
-    var team1 = e.delegateTarget.cells[0].innerText;
-    var team2 = e.delegateTarget.cells[2].innerText;
-    var result1 = e.delegateTarget.cells[3].childNodes[0][0].valueAsNumber;
-    var result2 = e.delegateTarget.cells[3].childNodes[0][1].valueAsNumber;
-    var winner, loser;
-    var winnerTeam = [];
-    var loserTeam = [];
-    var defineWinner = function () {
-        if (result1 > result2) {
-            winner = team1;
-            loser = team2;
-            winnerTeam.push(result1);
-            loserTeam.push(result2);
-        }
-        else {
-            winner = team2;
-            loser = team1;
-            winnerTeam.push(result2);
-            loserTeam.push(result1);
-        }
-    }();
-    var spliter = " & ";
-    winnerTeam.push(winner.split(spliter)[0]);
-    winnerTeam.push(winner.split(spliter)[1]);
-    loserTeam.push(loser.split(spliter)[0]);
-    loserTeam.push(loser.split(spliter)[1]);
-    for (var i = 1; i < winnerTeam.length; i++){
-        var row = $('#ranking td').filter(function () {
-            return $(this).text() === winnerTeam[i];
-        }).closest('tr')[0];
-        var currentWins = row.childNodes[1];
-        var currentGF = row.childNodes[3];
-        var currentGA = row.childNodes[4];
-        var currentGD = row.childNodes[5];
-        var NumOfCurrentWins = parseInt(currentWins.innerHTML);
-        var NumOfCurrentGF = parseInt(currentGF.innerHTML);
-        var NumOfCurrentGA = parseInt(currentGA.innerHTML);
-        var NumOfCurrentGD = parseInt(currentGD.innerHTML);
-        currentWins.innerHTML = (NumOfCurrentWins + 1).toString();
-        currentGF.innerHTML = (NumOfCurrentGA + winnerTeam[0]).toString();
-        currentGA.innerHTML = (NumOfCurrentGF + loserTeam[0]).toString();
-        currentGD.innerHTML = (NumOfCurrentGD + (winnerTeam[0] - loserTeam[0])).toString();
-    }
-    for (var i = 1; i < loserTeam.length; i++){
-        var row = $('#ranking td').filter(function () {
-            return $(this).text() === loserTeam[i];
-        }).closest('tr')[0];
-        var currentLoses = row.childNodes[2];
-        var currentGF = row.childNodes[3];
-        var currentGA = row.childNodes[4];
-        var currentGD = row.childNodes[5];
-        var NumOfCurrentLoses = parseInt(currentLoses.innerHTML);
-        var NumOfCurrentGF = parseInt(currentGF.innerHTML);
-        var NumOfCurrentGA = parseInt(currentGA.innerHTML);
-        var NumOfCurrentGD = parseInt(currentGD.innerHTML);
-        currentLoses.innerHTML = (NumOfCurrentLoses + 1).toString();
-        currentGF.innerHTML = (NumOfCurrentGF + loserTeam[0]).toString();
-        currentGA.innerHTML = (NumOfCurrentGA + winnerTeam[0]).toString();
-        currentGD.innerHTML = (NumOfCurrentGD - (winnerTeam[0] - loserTeam[0])).toString();
-    }
-    sortRanking();
+
+    // $resultsTable.empty();
+    if (wyniki.length){
+        wyniki.forEach(function (meczyk) {
+    // 
+    // var result1 = e.delegateTarget.cells[3].childNodes[0][0].valueAsNumber;
+    // var result2 = e.delegateTarget.cells[3].childNodes[0][1].valueAsNumber;
+//     var winner, loser;
+//     var winnerTeam = [];
+//     var loserTeam = [];
+//     var defineWinner = function () {
+//         if (result1 > result2) {
+//             winner = team1;
+//             loser = team2;
+//             winnerTeam.push(result1);
+//             loserTeam.push(result2);
+//         }
+//         else {
+//             winner = team2;
+//             loser = team1;
+//             winnerTeam.push(result2);
+//             loserTeam.push(result1);
+//         }
+//     }();
+//     var spliter = " & ";
+//     winnerTeam.push(winner.split(spliter)[0]);
+//     winnerTeam.push(winner.split(spliter)[1]);
+//     loserTeam.push(loser.split(spliter)[0]);
+//     loserTeam.push(loser.split(spliter)[1]);
+//     for (var i = 1; i < winnerTeam.length; i++){
+//         var row = $('#ranking td').filter(function () {
+//             return $(this).text() === winnerTeam[i];
+//         }).closest('tr')[0];
+//         var currentWins = row.childNodes[1];
+//         var currentGF = row.childNodes[3];
+//         var currentGA = row.childNodes[4];
+//         var currentGD = row.childNodes[5];
+//         var NumOfCurrentWins = parseInt(currentWins.innerHTML);
+//         var NumOfCurrentGF = parseInt(currentGF.innerHTML);
+//         var NumOfCurrentGA = parseInt(currentGA.innerHTML);
+//         var NumOfCurrentGD = parseInt(currentGD.innerHTML);
+//         currentWins.innerHTML = (NumOfCurrentWins + 1).toString();
+//         currentGF.innerHTML = (NumOfCurrentGA + winnerTeam[0]).toString();
+//         currentGA.innerHTML = (NumOfCurrentGF + loserTeam[0]).toString();
+//         currentGD.innerHTML = (NumOfCurrentGD + (winnerTeam[0] - loserTeam[0])).toString();
+//     }
+//     for (var i = 1; i < loserTeam.length; i++){
+//         var row = $('#ranking td').filter(function () {
+//             return $(this).text() === loserTeam[i];
+//         }).closest('tr')[0];
+//         var currentLoses = row.childNodes[2];
+//         var currentGF = row.childNodes[3];
+//         var currentGA = row.childNodes[4];
+//         var currentGD = row.childNodes[5];
+//         var NumOfCurrentLoses = parseInt(currentLoses.innerHTML);
+//         var NumOfCurrentGF = parseInt(currentGF.innerHTML);
+//         var NumOfCurrentGA = parseInt(currentGA.innerHTML);
+//         var NumOfCurrentGD = parseInt(currentGD.innerHTML);
+//         currentLoses.innerHTML = (NumOfCurrentLoses + 1).toString();
+//         currentGF.innerHTML = (NumOfCurrentGF + loserTeam[0]).toString();
+//         currentGA.innerHTML = (NumOfCurrentGA + winnerTeam[0]).toString();
+//         currentGD.innerHTML = (NumOfCurrentGD - (winnerTeam[0] - loserTeam[0])).toString();
+//     }
+//     sortRanking();
 };
 
 $fixtures.on('submit', 'form', function (e) {
     e.preventDefault();
     submitMatchScore(e);
-    updateRanking(e);
+    // updateRanking(e);
 });
 
 $drawBtn.on('click', drawNextGame);
