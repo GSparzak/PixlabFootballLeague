@@ -1,10 +1,7 @@
-
 var wyniki = [];
-
 var updateRanking = function () {
     var resetRanking = function () {
         var $rankingRows = $('#ranking tr');
-        console.log($rankingRows);
         for (var i = 1; i < $rankingRows.length; i++) {
             for (var j = 1; j < $rankingRows[i].childNodes.length; j++) {
                 $rankingRows[i].childNodes[j].innerHTML = 0;
