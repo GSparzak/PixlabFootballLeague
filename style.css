@@ -181,6 +181,9 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+input[type=number] {
+    -moz-appearance:textfield;
+}
 
 .result input[type='submit'] {
     padding: 5px;
