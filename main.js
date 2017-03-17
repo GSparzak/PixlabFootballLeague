@@ -269,6 +269,8 @@ var updateRanking = function (e) {
 //         currentGD.innerHTML = (NumOfCurrentGD - (winnerTeam[0] - loserTeam[0])).toString();
 //     }
 //     sortRanking();
+        })
+    }
 };
 
 $fixtures.on('submit', 'form', function (e) {
