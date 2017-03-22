@@ -1,4 +1,6 @@
 var wyniki = [];
+
+//update players ranking after submiting match result
 var updateRanking = function () {
     var resetRanking = function () {
         var $rankingRows = $('#ranking tr');
@@ -8,6 +10,7 @@ var updateRanking = function () {
             }
         }
     };
+    //sort ranking by wins; if number of wins is the same, the player with higher goals difference is higher; if that is also equal, the player with more goals scores (gf) is better
     var sortRanking = function () {
         $(' #ranking tbody > tr').sort(function (a, b) {
             if (+$('td.wins', b).text() === +$('td.wins', a).text()) {
@@ -19,7 +22,10 @@ var updateRanking = function () {
             return +$('td.wins', b).text() > +$('td.wins', a).text();
         }).appendTo('tbody')
     }
+
     resetRanking ();
+
+// find who won the game, who lost it and was the score and put it into separate arrays
     if (wyniki.length){
         wyniki.forEach(function (meczyk) {
             var result1 = parseInt(meczyk.team1Score);
@@ -46,40 +52,55 @@ var updateRanking = function () {
             winnerTeam.push(winner.split(spliter)[1]);
             loserTeam.push(loser.split(spliter)[0]);
             loserTeam.push(loser.split(spliter)[1]);
+            // update winners numbers
             for (var i = 1; i < winnerTeam.length; i++){
+                //find the row in the ranking with current player data
                 var row = $('#ranking td').filter(function () {
                     return $(this).text() === winnerTeam[i];
                 }).closest('tr')[0];
-                var currentWins = row.childNodes[1];
-                var currentGF = row.childNodes[3];
-                var currentGA = row.childNodes[4];
-                var currentGD = row.childNodes[5];
+                //get current numbers
+                var currentPlayed = row.childNodes[1];
+                var currentWins = row.childNodes[2];
+                var currentGF = row.childNodes[4];
+                var currentGA = row.childNodes[5];
+                var currentGD = row.childNodes[6];
+                var NumOfCurrentPlayed = parseInt(currentPlayed.innerHTML);
                 var NumOfCurrentWins = parseInt(currentWins.innerHTML);
                 var NumOfCurrentGF = parseInt(currentGF.innerHTML);
                 var NumOfCurrentGA = parseInt(currentGA.innerHTML);
                 var NumOfCurrentGD = parseInt(currentGD.innerHTML);
+                //update the numbers
+                currentPlayed.innerHTML = (NumOfCurrentPlayed + 1).toString();
                 currentWins.innerHTML = (NumOfCurrentWins + 1).toString();
                 currentGF.innerHTML = (NumOfCurrentGF + winnerTeam[0]).toString();
                 currentGA.innerHTML = (NumOfCurrentGA + loserTeam[0]).toString();
                 currentGD.innerHTML = (NumOfCurrentGD + (winnerTeam[0] - loserTeam[0])).toString();
             }
+            //update losers numbers
             for (var i = 1; i < loserTeam.length; i++){
+                //find the row in the ranking with current player data
                 var row = $('#ranking td').filter(function () {
                     return $(this).text() === loserTeam[i];
                 }).closest('tr')[0];
-                var currentLoses = row.childNodes[2];
-                var currentGF = row.childNodes[3];
-                var currentGA = row.childNodes[4];
-                var currentGD = row.childNodes[5];
+                //get current numbers
+                var currentPlayed = row.childNodes[1];
+                var currentLoses = row.childNodes[3];
+                var currentGF = row.childNodes[4];
+                var currentGA = row.childNodes[5];
+                var currentGD = row.childNodes[6];
+                var NumOfCurrentPlayed = parseInt(currentPlayed.innerHTML);
                 var NumOfCurrentLoses = parseInt(currentLoses.innerHTML);
                 var NumOfCurrentGF = parseInt(currentGF.innerHTML);
                 var NumOfCurrentGA = parseInt(currentGA.innerHTML);
                 var NumOfCurrentGD = parseInt(currentGD.innerHTML);
+                //update the numbers
+                currentPlayed.innerHTML = (NumOfCurrentPlayed + 1).toString();
                 currentLoses.innerHTML = (NumOfCurrentLoses + 1).toString();
                 currentGF.innerHTML = (NumOfCurrentGF + loserTeam[0]).toString();
                 currentGA.innerHTML = (NumOfCurrentGA + winnerTeam[0]).toString();
                 currentGD.innerHTML = (NumOfCurrentGD - (winnerTeam[0] - loserTeam[0])).toString();
             }
+            //sort the ranking by wins/GD/GF
             sortRanking();
         })
     }
@@ -90,7 +111,7 @@ var createSeason = function() {
     var teams = [];
     var games = [];
     var players = ["Płotek", "Michał", "Grz3gorz", "Boguś", "Dyga", "Gregor"];
-
+    //create players ranking
     var showRanking = function (names) {
         var $ranking = $('#ranking table');
         var $tbody = $('<tbody>');
@@ -101,25 +122,29 @@ var createSeason = function() {
             $td.text(name).addClass('rankNames');
             $tr.append($td);
             var $td1 = $('<td>');
-            $td1.text(0).addClass('rankNames wins');
+            $td1.text(0).addClass('rankNames gamesPlayed');
             $tr.append($td1);
             var $td2 = $('<td>');
-            $td2.text(0).addClass('rankNames');
+            $td2.text(0).addClass('rankNames wins');
             $tr.append($td2);
             var $td3 = $('<td>');
-            $td3.text(0).addClass('rankNames gf');
+            $td3.text(0).addClass('rankNames');
             $tr.append($td3);
             var $td4 = $('<td>');
-            $td4.text(0).addClass('rankNames');
+            $td4.text(0).addClass('rankNames gf');
             $tr.append($td4);
             var $td5 = $('<td>');
-            $td5.text(0).addClass('rankNames gd');
+            $td5.text(0).addClass('rankNames');
             $tr.append($td5);
+            var $td6 = $('<td>');
+            $td6.text(0).addClass('rankNames gd');
+            $tr.append($td6);
             $tbody.append($tr);
         })
         $ranking.append($tbody);
     }
 
+    //take the array with players names and make all possible teams
     var createTeams = function() {
         var tempTeams = [];
         for (var i = 0; i < players.length; i++) {

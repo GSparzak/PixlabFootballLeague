@@ -53,7 +53,7 @@ main {
 }
 
 .lists {
-    width: 92%;
+    width: 93%;
     height: 60%;
     margin: 0 auto;
     display: flex;
@@ -69,7 +69,7 @@ main {
 }
 
 #listOfGames {
-    width: 56%;
+    width: 54%;
 }
 
 #listOfGames tr {
@@ -82,7 +82,7 @@ main {
 }
 
 #ranking {
-    width: 40%;
+    width: 42%;
     counter-reset: rank;
 }
 
@@ -107,7 +107,7 @@ td.team2,
 td.rankNames,
 td.score {
     font-family: 'Comfortaa', cursive;
-    font-size: 26px;
+    font-size: 24px;
 }
 
 td.team1 {
@@ -121,7 +121,7 @@ td.team2 {
 td.versus {
     color: #d00;
     font-family: 'Chelsea Market', cursive;
-    font-size: 26px;
+    font-size: 24px;
 }
 
 #results {
@@ -134,7 +134,7 @@ td.score {
 
 tr.results {
     font-family: 'Comfortaa', cursive;
-    font-size: 26px;
+    font-size: 24px;
 }
 
 #listOfGames tr.results > td:first-of-type {
