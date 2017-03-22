@@ -1,4 +1,5 @@
 var wyniki = [];
+var fixtures = [];
 
 //update players ranking after submiting match result
 var updateRanking = function () {
@@ -185,6 +186,7 @@ var createSeason = function() {
                 }
             }
         });
+
     }
 
     var removeDuplicates = function () {
@@ -197,24 +199,36 @@ var createSeason = function() {
         });
     }
 
+    var saveFixtures = function () {
+        games.forEach(function (match) {
+            var game = {};
+            for (var i = 0; i < match.length; i++){
+                game['player' + i] = match[i];
+            }
+            fixtures.push(game);
+        })
+        localStorage.setItem('fixtures', JSON.stringify(fixtures));
+    }
+
     var createFixtures = function() {
         createAllTeamCombinations();
         removeDuplicates();
+        saveFixtures();
     }
 
     var displayFixtures = function () {
         var $fixtures = $('#fixtures');
-
-        games.forEach(function (game) {
+        fixtures = localStorage.getItem('fixtures') ? JSON.parse(localStorage.getItem('fixtures')) : [];
+        fixtures.forEach(function (game) {
             var $tr = $('<tr>');
             var $td1 = $('<td>');
-            $td1.text(game[0] + ' & ' + game[1]).addClass('team1');
+            $td1.text(game.player0 + ' & ' + game.player1).addClass('team1');
             $tr.append($td1);
             var $td2 = $('<td>');
             $td2.text('vs').addClass('versus');
             $tr.append($td2);
             var $td3 = $('<td>');
-            $td3.text(game[2] + ' & ' + game[3]).addClass('team2');
+            $td3.text(game.player2 + ' & ' + game.player3).addClass('team2');
             $tr.append($td3);
             var $td4 = $('<td>');
             var $form = $('<form>');
@@ -286,7 +300,7 @@ var submitMatchScore = function (e) {
     var team1Score = e.target[0].value;
     var team2Score = e.target[1].value;
     var meczyk = {};
-    var wyniki = localStorage.getItem('wyniki') ? JSON.parse(localStorage.getItem('wyniki')) : [];
+    wyniki = localStorage.getItem('wyniki') ? JSON.parse(localStorage.getItem('wyniki')) : [];
     meczyk.team1 = team1;
     meczyk.team2 = team2;
     meczyk.team1Score = team1Score;
