@@ -107,44 +107,10 @@ var updateRanking = function () {
     }
 };
 
-var createSeason = function() {
-
+var createSeason = function () {
     var teams = [];
     var games = [];
     var players = ["Płotek", "Michał", "Grz3gorz", "Boguś", "Dyga", "Gregor"];
-    //create players ranking
-    var showRanking = function (names) {
-        var $ranking = $('#ranking table');
-        var $tbody = $('<tbody>');
-
-        names.forEach(function (name) {
-            var $tr = $('<tr>');
-            var $td = $('<td>');
-            $td.text(name).addClass('rankNames');
-            $tr.append($td);
-            var $td1 = $('<td>');
-            $td1.text(0).addClass('rankNames gamesPlayed');
-            $tr.append($td1);
-            var $td2 = $('<td>');
-            $td2.text(0).addClass('rankNames wins');
-            $tr.append($td2);
-            var $td3 = $('<td>');
-            $td3.text(0).addClass('rankNames');
-            $tr.append($td3);
-            var $td4 = $('<td>');
-            $td4.text(0).addClass('rankNames gf');
-            $tr.append($td4);
-            var $td5 = $('<td>');
-            $td5.text(0).addClass('rankNames');
-            $tr.append($td5);
-            var $td6 = $('<td>');
-            $td6.text(0).addClass('rankNames gd');
-            $tr.append($td6);
-            $tbody.append($tr);
-        })
-        $ranking.append($tbody);
-    }
-
     //take the array with players names and make all possible teams
     var createTeams = function() {
         var tempTeams = [];
@@ -216,6 +182,50 @@ var createSeason = function() {
         saveFixtures();
     }
 
+    createTeams();
+    createFixtures();
+}
+
+var launchApp = function() {
+
+    var teams = [];
+    var games = [];
+    var players = ["Płotek", "Michał", "Grz3gorz", "Boguś", "Dyga", "Gregor"];
+    //create players ranking
+    var showRanking = function (names) {
+        var $ranking = $('#ranking table');
+        var $tbody = $('<tbody>');
+
+        names.forEach(function (name) {
+            var $tr = $('<tr>');
+            var $td = $('<td>');
+            $td.text(name).addClass('rankNames');
+            $tr.append($td);
+            var $td1 = $('<td>');
+            $td1.text(0).addClass('rankNames gamesPlayed');
+            $tr.append($td1);
+            var $td2 = $('<td>');
+            $td2.text(0).addClass('rankNames wins');
+            $tr.append($td2);
+            var $td3 = $('<td>');
+            $td3.text(0).addClass('rankNames');
+            $tr.append($td3);
+            var $td4 = $('<td>');
+            $td4.text(0).addClass('rankNames gf');
+            $tr.append($td4);
+            var $td5 = $('<td>');
+            $td5.text(0).addClass('rankNames');
+            $tr.append($td5);
+            var $td6 = $('<td>');
+            $td6.text(0).addClass('rankNames gd');
+            $tr.append($td6);
+            $tbody.append($tr);
+        })
+        $ranking.append($tbody);
+    }
+
+
+
     var displayFixtures = function () {
         var $fixtures = $('#fixtures');
         fixtures = localStorage.getItem('fixtures') ? JSON.parse(localStorage.getItem('fixtures')) : [];
@@ -247,8 +257,7 @@ var createSeason = function() {
             $fixtures.append($tr);
         })
     }
-    createTeams();
-    createFixtures();
+
     displayFixtures();
     showRanking(players);
     updateResults();
@@ -277,7 +286,8 @@ var updateResults = function () {
     }
 }
 
-createSeason();
+launchApp();
+// createSeason();
 
 var $drawBtn = $('.drawRandomGame');
 var drawNextGame = function () {
@@ -298,7 +308,6 @@ var submitMatchScore = function (e) {
         fixtures = [];
         var $gamesLeft = $('#fixtures tr');
         var $gamesLeftArray = Array.prototype.slice.call($gamesLeft);
-        console.log($gamesLeft);
         $gamesLeftArray.forEach(function (game) {
             var fixture = {};
             players = [];
