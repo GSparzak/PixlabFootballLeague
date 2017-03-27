@@ -1,5 +1,6 @@
 var wyniki = [];
 var fixtures = [];
+var players = ["Płotek", "Michał", "Grz3gorz", "Boguś", "Dyga", "Gregor"];
 
 //update players ranking after submiting match result
 var updateRanking = function () {
@@ -110,7 +111,7 @@ var updateRanking = function () {
 var createSeason = function () {
     var teams = [];
     var games = [];
-    var players = ["Płotek", "Michał", "Grz3gorz", "Boguś", "Dyga", "Gregor"];
+
     //take the array with players names and make all possible teams
     var createTeams = function() {
         var tempTeams = [];
@@ -187,10 +188,11 @@ var createSeason = function () {
 }
 
 var launchApp = function() {
-
-    var teams = [];
-    var games = [];
-    var players = ["Płotek", "Michał", "Grz3gorz", "Boguś", "Dyga", "Gregor"];
+    if (!JSON.parse(localStorage.getItem('fixtures'))){
+        if(confirm('There are no fixtures. Do you want to start new season?')){
+            createSeason();
+        }
+    }
     //create players ranking
     var showRanking = function (names) {
         var $ranking = $('#ranking table');
