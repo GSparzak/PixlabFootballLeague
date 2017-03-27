@@ -26,7 +26,7 @@ var updateRanking = function () {
 
     resetRanking ();
 
-// find who won the game, who lost it and was the score and put it into separate arrays
+    // find who won the game, who lost it and was the score and put it into separate arrays
     if (wyniki.length){
         wyniki.forEach(function (meczyk) {
             var result1 = parseInt(meczyk.team1Score);
@@ -294,6 +294,28 @@ var drawNextGame = function () {
 var $fixtures = $('#fixtures tr');
 
 var submitMatchScore = function (e) {
+    var saveFixturesInStorage = function () {
+        fixtures = [];
+        var $gamesLeft = $('#fixtures tr');
+        var $gamesLeftArray = Array.prototype.slice.call($gamesLeft);
+        console.log($gamesLeft);
+        $gamesLeftArray.forEach(function (game) {
+            var fixture = {};
+            players = [];
+            var team1 = game.children[0].innerText;
+            var team2 = game.children[2].innerText;
+            var spliter = " & ";
+            players.push(team1.split(spliter)[0]);
+            players.push(team1.split(spliter)[1]);
+            players.push(team2.split(spliter)[0]);
+            players.push(team2.split(spliter)[1]);
+            for (var i = 0; i < players.length; i++) {
+                fixture['player' + i] = players[i];
+            }
+            fixtures.push(fixture);
+            localStorage.setItem("fixtures", JSON.stringify(fixtures));
+        })
+    }
     var $row = e.delegateTarget;
     var team1 = e.delegateTarget.cells[0].innerText;
     var team2 = e.delegateTarget.cells[2].innerText;
@@ -310,6 +332,7 @@ var submitMatchScore = function (e) {
     updateResults();
     updateRanking();
     $row.remove();
+    saveFixturesInStorage();
 };
 
 $fixtures.on('submit', 'form', function (e) {
