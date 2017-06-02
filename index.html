@@ -13,45 +13,49 @@
 </head>
 
 <body>
-    <header>
-        <img src="pixlab_logo.png" alt="">
-        <h1>TABLE FOOTBALL LEAGUE</h1>
-        <h2>SEASON 6</h2>
-    </header>
-    <main>
-        <div class="lists">
-            <div id="listOfGames">
-                <table id='results'>
-                    <h3>RESULTS</h3>
-                </table>
-                <table id='fixtures'>
-                    <h3>FIXTURES</h3>
-                </table>
-            </div>
-            <div id="ranking">
-                <h3>RANKING</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Name</th>
-                            <th>P</th>
-                            <th>W</th>
-                            <th>L</th>
-                            <th>GF</th>
-                            <th>GA</th>
-                            <th>GD</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
+    <div class="firstPage">
+        <header>
+            <img src="pixlab_logo.png" alt="">
+            <h1>TABLE FOOTBALL LEAGUE</h1>
+        </header>
+        <div id="ranking">
+            <!-- <h3>RANKING</h3> -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Miejsce</th>
+                        <th>Imię</th>
+                        <th>Rozegrane</th>
+                        <th>Wygrane</th>
+                        <th>Przegrane</th>
+                        <th>Gole zdobyte</th>
+                        <th>Gole stracone</th>
+                        <th>Gole - różnica</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
         <div class="drawRandomGame">
-            <span>DRAW NEXT GAME</span>
+            <span>LOSUJ!</span>
         </div>
-        <div class="nextGame">
+        <div class="nextGame"></div>
+        <div class="to2ndPage" id="to2ndPage">
+            <a href="">mecze</a>
         </div>
-    </main>
+        <div class="backToTop" id="backToTop">
+            <a href="">top</a>
+        </div>
+    </div>
+    <div class="secondPage">
+        <div id="listOfGames">
+            <table id='results'>
+                <h3>WYNIKI:</h3>
+            </table>
+            <table id='fixtures'>
+                <h3>DO ROZEGRANIA:</h3>
+            </table>
+        </div>
+    </div>
 <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="main.js"></script>
 </body>

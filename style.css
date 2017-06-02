@@ -1,21 +1,26 @@
+* {
+    outline: none;
+}
+
 body {
     margin: 0;
     padding: 0;
-    height: 100vh;
-    background: url(bg.jpg) center center no-repeat;
-    background-size: cover;
-    overflow: hidden;
+    height: 100%;
+    background: url(black_lozenge.png);
+    /*background-size: cover;*/
+    overflow: auto;
 }
 
 header {
     height: 15vh;
-    margin: 20px 20px 40px;
+    margin: 60px 20px 40px;
     text-align: center;
 }
 
 img {
     height: 59%;
 }
+
 
 h1 {
     font-family: 'Revalia', cursive;
@@ -36,7 +41,7 @@ h2 {
 h3 {
     text-align: center;
     font-family: 'Comfortaa', cursive;
-    color: #000;
+    color: #ddd;
     font-size: 30px;
     margin: 20px 0;
 }
@@ -48,28 +53,87 @@ h4 {
     font-size: 20px;
 }
 
-main {
-    height: 80vh;
+
+.firstPage,
+.secondPage {
+    height: 100vh;
 }
 
-.lists {
-    width: 93%;
-    height: 60%;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
+#to2ndPage {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    width: 0;
+	height: 0;
+	border-left: 60px solid transparent;
+	border-right: 60px solid transparent;
+	border-top: 60px solid #2da8e1;
+    padding: 0;
+    background-color: transparent;
+    box-sizing: border-box;
+    cursor: pointer;
 }
+
+#to2ndPage > a {
+    text-transform: uppercase;
+    position: absolute;
+    top: -53px;
+    left: -32px;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Comfortaa', sans-serif;
+}
+
+#backToTop {
+    position: fixed;
+    display: none;
+    right: 40px;
+    bottom: 40px;
+    width: 0;
+	height: 0;
+	border-left: 60px solid transparent;
+	border-right: 60px solid transparent;
+	border-bottom: 60px solid #2da8e1;
+    padding: 0;
+    background-color: transparent;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+#backToTop > a {
+    text-transform: uppercase;
+    position: absolute;
+    bottom: -53px;
+    left: -18px;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Comfortaa', sans-serif;
+}
+
+/*#to2ndPage:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%);
+    width: 0;
+	height: 0;
+	border-top: 30px solid transparent;
+	border-left: 30px solid #2da8e1;
+	border-bottom: 30px solid transparent;
+    z-index: -1;
+}*/
 
 #listOfGames,
 #ranking {
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid #d00;
-    color: #000;
+    background: transparent;
+    color: #F0F8FF;
+    margin: 0 auto;
     overflow-y: auto;
 }
 
 #listOfGames {
-    width: 54%;
+    width: 65%;
 }
 
 #listOfGames tr {
@@ -82,12 +146,26 @@ main {
 }
 
 #ranking {
-    width: 42%;
+    width: 80%;
     counter-reset: rank;
+}
+
+#ranking table {
+    table-layout: fixed;
+    width: 100%;
 }
 
 #ranking th {
     font-family: 'Comfortaa', cursive;
+    padding: 0 20px;
+}
+
+#ranking th:first-of-type {
+    width: 6%;
+}
+
+#ranking th:nth-of-type(2) {
+    width: 30%;
 }
 
 #ranking tbody tr:before {
@@ -101,6 +179,17 @@ main {
     left: 20px;
 }
 
+#ranking td {
+    text-align: center;
+}
+
+#ranking td:nth-of-type(3) {
+    color: green;
+}
+
+#ranking td:last-of-type {
+    color: orange;
+}
 
 td.team1,
 td.team2,
@@ -119,22 +208,33 @@ td.team2 {
 }
 
 td.versus {
-    color: #d00;
+    color: #2da8e1;
     font-family: 'Chelsea Market', cursive;
     font-size: 24px;
+    text-align: center;
 }
 
 #results {
+    width: 70%;
+    margin: 0 auto 100px;
+}
+
+
+#fixtures {
     width: 100%;
 }
 
 td.score {
-    color: #d00;
+    color: #2da8e1;
 }
 
 tr.results {
     font-family: 'Comfortaa', cursive;
     font-size: 24px;
+}
+
+tr.results td:last-of-type {
+    text-align: center;
 }
 
 #listOfGames tr.results > td:first-of-type {
@@ -146,12 +246,12 @@ td.rankNames {
 }
 
 .drawRandomGame {
-    background-color: #d00;
+    background-color: #2da8e1;
     width: 320px;
     padding: 18px 15px 15px;
-    margin: 40px auto 20px;
+    margin: 80px auto 60px;
     border: 2px solid #fff;
-    /*border-radius: 100px;*/
+    border-radius: 10px;
     text-align: center;
     color: #fff;
     font-size: 32px;
@@ -160,12 +260,23 @@ td.rankNames {
     cursor: pointer;
 }
 
-.nextGame {margin-top: 20px;
+.drawRandomGame:hover {
+    background-color: #1E90FF;
+    transform: scale(1.05);
+}
+
+.nextGame {
+    height: 100px;
+    margin-top: 20px;
     text-align: center;
     color: #fff;
     font-size: 60px;
     font-weight: 700;
     font-family: 'Gruppo', sans-serif;
+}
+
+#fixtures tr td {
+    padding-top: 10px;
 }
 
 .result input[type='number'] {
@@ -174,6 +285,9 @@ td.rankNames {
     padding: 3px 0 2px;
     font-size: 18px;
     text-align: center;
+    border: none;
+    border-radius: 2px;
+    outline: none;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -186,7 +300,19 @@ input[type=number] {
 }
 
 .result input[type='submit'] {
-    padding: 5px;
+    padding: 5px 20px;
     margin: 0 10px;
     font-size: 14px;
+    border-radius: 2px;
+    border: 1px solid #2da8e1;
+    background-color: #2da8e1;
+    color: #ddd;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.result input[type='submit']:hover {
+    /*background-color: #1E90FF;*/
+    color: #fff;
+    border: 1px solid #fff;
 }

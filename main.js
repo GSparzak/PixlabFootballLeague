@@ -250,7 +250,7 @@ var launchApp = function() {
             $form.addClass('result');
             $input1.attr({type: 'number', min: 0, name: 'team1Score', required: true});
             $input2.attr({type: 'number', min: 0, name: 'team2Score', required: true});
-            $input3.attr('type', 'submit').val('SAVE');
+            $input3.attr('type', 'submit').val('ZAPISZ WYNIK');
             $form.append($input1);
             $form.append($input2);
             $form.append($input3);
@@ -352,3 +352,68 @@ $fixtures.on('submit', 'form', function (e) {
 });
 
 $drawBtn.on('click', drawNextGame);
+
+
+/*
+
+
+########     ###     ######   ########     ######  ##     ##    ###    ##    ##  ######   ########
+##     ##   ## ##   ##    ##  ##          ##    ## ##     ##   ## ##   ###   ## ##    ##  ##
+##     ##  ##   ##  ##        ##          ##       ##     ##  ##   ##  ####  ## ##        ##
+########  ##     ## ##   #### ######      ##       ######### ##     ## ## ## ## ##   #### ######
+##        ######### ##    ##  ##          ##       ##     ## ######### ##  #### ##    ##  ##
+##        ##     ## ##    ##  ##          ##    ## ##     ## ##     ## ##   ### ##    ##  ##
+##        ##     ##  ######   ########     ######  ##     ## ##     ## ##    ##  ######   ########
+
+
+*/
+
+$('#to2ndPage').on("click", function(){
+    var target = $('#listOfGames');
+    var btn = $('#to2ndPage');
+    // target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+    event.preventDefault();
+    $('html, body').animate({
+        scrollTop: target.offset().top
+    }, 500, function() {
+      // Callback after animation
+      // Must change focus!
+        var $target = $(target);
+        $target.focus();
+        if ($target.is(":focus")) { // Checking if the target was focused
+            return false;
+        } else {
+            $target.attr('tabindex','-1'); // Adding tabindex for elements not focusable
+            $target.focus(); // Set focus again
+        };
+    });
+    btn.fadeOut();
+})
+
+$('#backToTop').on('click', function () {
+    event.preventDefault();
+    $('html, body').animate({
+        scrollTop: 0
+    }, 500);
+})
+
+$(document).on('scroll', function () {
+    var btn = $('#to2ndPage');
+    var top = $('#backToTop');
+    // var link = $('#to2ndPage a');
+    if ($(document).scrollTop() === 0) {
+        btn.fadeIn();
+        top.fadeOut();
+    }
+    if ($(document).scrollTop() >= 100) {
+        btn.fadeOut();
+    }
+    if ($(document).scrollTop() >= 1000) {
+        top.fadeIn();
+    }
+    // if ($(this).scrollTop() >= btn.position().top) {
+    //     console.log(link.text());
+    //     btn.css('transform','rotate(180deg)');
+    //     link.innerText = 'tabela';
+    // }
+})
