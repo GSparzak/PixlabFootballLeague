@@ -231,8 +231,10 @@ var launchApp = function() {
     var displayFixtures = function () {
         var $fixtures = $('#fixtures');
         fixtures = localStorage.getItem('fixtures') ? JSON.parse(localStorage.getItem('fixtures')) : [];
+        var i = 0;
         fixtures.forEach(function (game) {
             var $tr = $('<tr>');
+            $tr.attr('id', 'game' + i);
             var $td1 = $('<td>');
             $td1.text(game.player0 + ' & ' + game.player1).addClass('team1');
             $tr.append($td1);
@@ -257,6 +259,7 @@ var launchApp = function() {
             $td4.append($form);
             $tr.append($td4);
             $fixtures.append($tr);
+            i++;
         })
     }
 
@@ -291,17 +294,23 @@ var updateResults = function () {
 launchApp();
 // createSeason();
 
+var $nextMatch;
+
 var $drawBtn = $('.drawRandomGame');
 var drawNextGame = function () {
     var $fixtures = $('#fixtures tr');
     var numOfGamesLeft = $fixtures.length;
     var nextGame = Math.round(Math.random()*numOfGamesLeft);
     var chosenGame = $fixtures[nextGame].innerText;
+    var chosenGameID = $fixtures[nextGame].getAttribute('id');
     var $nextGameDiv = $('.nextGame');
     var $span = $('<span>');
     $span.append(chosenGame);
+    $span.attr('data-info', chosenGameID);
     $nextGameDiv.html($span);
 }
+
+$nextMatch = $('.nextGame');
 
 var $fixtures = $('#fixtures tr');
 
@@ -344,7 +353,30 @@ var submitMatchScore = function (e) {
     updateRanking();
     $row.remove();
     saveFixturesInStorage();
+    $('html, body').animate({
+        scrollTop: 0
+    }, 500);
 };
+
+var scrollToDrawnGame = function (e) {
+    e.preventDefault();
+    var targetID = $('.nextGame > span').attr('data-info');
+    var target = $('#' + targetID);
+    $('html, body').animate({
+        scrollTop: target.offset().top
+    }, 800, function() {
+      // Callback after animation
+      // Must change focus!
+        var $target = $(target);
+        $target.focus();
+        if ($target.is(":focus")) { // Checking if the target was focused
+            return false;
+        } else {
+            $target.attr('tabindex','-1'); // Adding tabindex for elements not focusable
+            $target.focus(); // Set focus again
+        };
+    });
+}
 
 $fixtures.on('submit', 'form', function (e) {
     e.preventDefault();
@@ -353,6 +385,7 @@ $fixtures.on('submit', 'form', function (e) {
 
 $drawBtn.on('click', drawNextGame);
 
+$nextMatch.on('click', scrollToDrawnGame);
 
 /*
 
@@ -411,9 +444,4 @@ $(document).on('scroll', function () {
     if ($(document).scrollTop() >= 1000) {
         top.fadeIn();
     }
-    // if ($(this).scrollTop() >= btn.position().top) {
-    //     console.log(link.text());
-    //     btn.css('transform','rotate(180deg)');
-    //     link.innerText = 'tabela';
-    // }
 })

@@ -275,6 +275,12 @@ td.rankNames {
     font-family: 'Gruppo', sans-serif;
 }
 
+.nextGame > a {
+    cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+}
+
 #fixtures tr td {
     padding-top: 10px;
 }
