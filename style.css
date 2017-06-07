@@ -222,6 +222,7 @@ td.versus {
 
 #fixtures {
     width: 100%;
+    margin-bottom: 1050px;
 }
 
 td.score {
@@ -275,7 +276,7 @@ td.rankNames {
     font-family: 'Gruppo', sans-serif;
 }
 
-.nextGame > a {
+.nextGame > span {
     cursor: pointer;
     color: #fff;
     text-decoration: none;
