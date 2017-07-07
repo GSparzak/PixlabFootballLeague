@@ -1,6 +1,6 @@
 var wyniki = [];
 var fixtures = [];
-var players = ["Płotek", "Michał", "Grz3gorz", "Boguś", "Dyga", "Gregor"];
+var players = ["Płotek", "Michał", "Grz3gorz", "Boguś", "Dyga", "Gregor", "Dawid"];
 
 //update players ranking after submiting match result
 var updateRanking = function () {
