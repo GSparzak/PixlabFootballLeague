@@ -124,6 +124,15 @@ h4 {
     z-index: -1;
 }*/
 
+#gamesLeft {
+    position: absolute;
+    top: 75%;
+    left: 40px;
+    color: #fff;
+    font-size: 20px;
+    font-family: 'Comfortaa', cursive;
+}
+
 #listOfGames,
 #ranking {
     background: transparent;
@@ -215,7 +224,7 @@ td.versus {
 }
 
 #results {
-    width: 70%;
+    width: 72%;
     margin: 0 auto 100px;
 }
 

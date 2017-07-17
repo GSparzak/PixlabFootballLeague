@@ -2,6 +2,191 @@ var wyniki = [];
 var fixtures = [];
 var players = ["@plotek", "@michal", "@grz3gorz", "@bogus", "@dyga", "@gsparzak", "@david"];
 
+var createSeason = function () {
+    var teams = [];
+    var games = [];
+
+    //take the array with players names and make all possible teams
+    var createTeams = function() {
+        var tempTeams = [];
+        for (var i = 0; i < players.length; i++) {
+            eval("tempTeams.push([])");
+            for (var j = 0; j < players.length; j++) {
+                if (j <= i) {
+                    continue;
+                } else {
+                    eval("tempTeams[i].push([])");
+                    tempTeams[i][j - (i + 1)].push(players[i]);
+                    tempTeams[i][j - (i + 1)].push(players[j]);
+                }
+            }
+        }
+        for (var i = 0; i < tempTeams.length; i++) {
+            if (tempTeams[i].length === 0) {
+                tempTeams.splice(i, 1);
+                i--;
+            } else {
+                teams = tempTeams.reduce(function(prev, curr) {
+                    return prev.concat(curr);
+                })
+            }
+        }
+    };
+
+    var createAllTeamCombinations = function (){
+        var count = 0;
+        teams.forEach(function(currTeam){
+            for (var i = 0; i < teams.length; i++) {
+                if (!teams[i].includes(currTeam[0]) && !teams[i].includes(currTeam[1])) {
+                    eval("games.push([])");
+                    games[count].push(currTeam[0]);
+                    games[count].push(currTeam[1]);
+                    games[count].push(teams[i][0]);
+                    games[count].push(teams[i][1]);
+                    count++;
+                }
+            }
+        });
+
+    }
+
+    var removeDuplicates = function () {
+        games.forEach(function (game) {
+            for (var i = 0; i < games.length; i++) {
+                    if ((games[i][0] === game[2] || games[i][0] === game[3]) && (games[i][1] === game[2] || games[i][1] === game[3]) && (games[i][2] === game[0] || games[i][2] === game[1]) && (games[i][3] === game[0] || games[i][3] === game[1])){
+                        games.splice(i, 1);
+                    }
+            }
+        });
+    }
+
+    var saveFixtures = function () {
+        games.forEach(function (match) {
+            var game = {};
+            for (var i = 0; i < match.length; i++){
+                game['player' + i] = match[i];
+            }
+            fixtures.push(game);
+        })
+        localStorage.setItem('fixtures', JSON.stringify(fixtures));
+    }
+
+    var createFixtures = function() {
+        createAllTeamCombinations();
+        removeDuplicates();
+        saveFixtures();
+    }
+
+    createTeams();
+    createFixtures();
+}
+
+var launchApp = function() {
+    if (!JSON.parse(localStorage.getItem('fixtures'))){
+        if(confirm('There are no fixtures. Do you want to start new season?')){
+            createSeason();
+        }
+    }
+
+    displayFixtures();
+    showRanking(players);
+    updateResults();
+    updateRanking();
+    countGamesLeft();
+};
+
+//create players ranking
+var showRanking = function (names) {
+    var $ranking = $('#ranking table');
+    var $tbody = $('<tbody>');
+
+    names.forEach(function (name) {
+        var $tr = $('<tr>');
+        var $td = $('<td>');
+        $td.text(name).addClass('rankNames');
+        $tr.append($td);
+        var $td1 = $('<td>');
+        $td1.text(0).addClass('rankNames gamesPlayed');
+        $tr.append($td1);
+        var $td2 = $('<td>');
+        $td2.text(0).addClass('rankNames wins');
+        $tr.append($td2);
+        var $td3 = $('<td>');
+        $td3.text(0).addClass('rankNames');
+        $tr.append($td3);
+        var $td4 = $('<td>');
+        $td4.text(0).addClass('rankNames gf');
+        $tr.append($td4);
+        var $td5 = $('<td>');
+        $td5.text(0).addClass('rankNames');
+        $tr.append($td5);
+        var $td6 = $('<td>');
+        $td6.text(0).addClass('rankNames gd');
+        $tr.append($td6);
+        $tbody.append($tr);
+    })
+    $ranking.append($tbody);
+}
+
+
+
+var displayFixtures = function () {
+    var $fixtures = $('#fixtures');
+    fixtures = localStorage.getItem('fixtures') ? JSON.parse(localStorage.getItem('fixtures')) : [];
+    var i = 0;
+    fixtures.forEach(function (game) {
+        var $tr = $('<tr>');
+        $tr.attr('id', 'game' + i);
+        var $td1 = $('<td>');
+        $td1.text(game.player0 + ' & ' + game.player1).addClass('team1');
+        $tr.append($td1);
+        var $td2 = $('<td>');
+        $td2.text('vs').addClass('versus');
+        $tr.append($td2);
+        var $td3 = $('<td>');
+        $td3.text(game.player2 + ' & ' + game.player3).addClass('team2');
+        $tr.append($td3);
+        var $td4 = $('<td>');
+        var $form = $('<form>');
+        var $input1 = $('<input>');
+        var $input2 = $('<input>');
+        var $input3 = $('<input>');
+        $form.addClass('result');
+        $input1.attr({type: 'number', min: 0, name: 'team1Score', required: true});
+        $input2.attr({type: 'number', min: 0, name: 'team2Score', required: true});
+        $input3.attr('type', 'submit').val('ZAPISZ WYNIK');
+        $form.append($input1);
+        $form.append($input2);
+        $form.append($input3);
+        $td4.append($form);
+        $tr.append($td4);
+        $fixtures.append($tr);
+        i++;
+    })
+}
+
+var updateResults = function () {
+    if (localStorage.getItem('wyniki')) {
+        wyniki = JSON.parse(localStorage.getItem('wyniki'))
+    }
+    var $resultsTable = $('#results');
+    $resultsTable.empty();
+    if (wyniki.length){
+        wyniki.forEach(function (meczyk) {
+            var $tr = $('<tr>');
+            var $td1 = $('<td>');
+            $td1.text(meczyk.team1 + " vs " + meczyk.team2);
+            $tr.append($td1);
+            var $td2 = $('<td>');
+            $td2.text(meczyk.team1Score + " : " + meczyk.team2Score);
+            $td2.addClass('score');
+            $tr.append($td2);
+            $tr.addClass('results');
+            $resultsTable.append($tr);
+        })
+    }
+}
+
 //update players ranking after submiting match result
 var updateRanking = function () {
     var resetRanking = function () {
@@ -108,195 +293,17 @@ var updateRanking = function () {
     }
 };
 
-var createSeason = function () {
-    var teams = [];
-    var games = [];
-
-    //take the array with players names and make all possible teams
-    var createTeams = function() {
-        var tempTeams = [];
-        for (var i = 0; i < players.length; i++) {
-            eval("tempTeams.push([])");
-            for (var j = 0; j < players.length; j++) {
-                if (j <= i) {
-                    continue;
-                } else {
-                    eval("tempTeams[i].push([])");
-                    tempTeams[i][j - (i + 1)].push(players[i]);
-                    tempTeams[i][j - (i + 1)].push(players[j]);
-                }
-            }
-        }
-        for (var i = 0; i < tempTeams.length; i++) {
-            if (tempTeams[i].length === 0) {
-                tempTeams.splice(i, 1);
-                i--;
-            } else {
-                teams = tempTeams.reduce(function(prev, curr) {
-                    return prev.concat(curr);
-                })
-            }
-        }
-    };
-
-    var createAllTeamCombinations = function (){
-        var count = 0;
-        teams.forEach(function(currTeam){
-            for (var i = 0; i < teams.length; i++) {
-                if (!teams[i].includes(currTeam[0]) && !teams[i].includes(currTeam[1])) {
-                    eval("games.push([])");
-                    games[count].push(currTeam[0]);
-                    games[count].push(currTeam[1]);
-                    games[count].push(teams[i][0]);
-                    games[count].push(teams[i][1]);
-                    count++;
-                }
-            }
-        });
-
-    }
-
-    var removeDuplicates = function () {
-        games.forEach(function (game) {
-            for (var i = 0; i < games.length; i++) {
-                    if ((games[i][0] === game[2] || games[i][0] === game[3]) && (games[i][1] === game[2] || games[i][1] === game[3]) && (games[i][2] === game[0] || games[i][2] === game[1]) && (games[i][3] === game[0] || games[i][3] === game[1])){
-                        games.splice(i, 1);
-                    }
-            }
-        });
-    }
-
-    var saveFixtures = function () {
-        games.forEach(function (match) {
-            var game = {};
-            for (var i = 0; i < match.length; i++){
-                game['player' + i] = match[i];
-            }
-            fixtures.push(game);
-        })
-        localStorage.setItem('fixtures', JSON.stringify(fixtures));
-    }
-
-    var createFixtures = function() {
-        createAllTeamCombinations();
-        removeDuplicates();
-        saveFixtures();
-    }
-
-    createTeams();
-    createFixtures();
-}
-
-var launchApp = function() {
-    if (!JSON.parse(localStorage.getItem('fixtures'))){
-        if(confirm('There are no fixtures. Do you want to start new season?')){
-            createSeason();
-        }
-    }
-    //create players ranking
-    var showRanking = function (names) {
-        var $ranking = $('#ranking table');
-        var $tbody = $('<tbody>');
-
-        names.forEach(function (name) {
-            var $tr = $('<tr>');
-            var $td = $('<td>');
-            $td.text(name).addClass('rankNames');
-            $tr.append($td);
-            var $td1 = $('<td>');
-            $td1.text(0).addClass('rankNames gamesPlayed');
-            $tr.append($td1);
-            var $td2 = $('<td>');
-            $td2.text(0).addClass('rankNames wins');
-            $tr.append($td2);
-            var $td3 = $('<td>');
-            $td3.text(0).addClass('rankNames');
-            $tr.append($td3);
-            var $td4 = $('<td>');
-            $td4.text(0).addClass('rankNames gf');
-            $tr.append($td4);
-            var $td5 = $('<td>');
-            $td5.text(0).addClass('rankNames');
-            $tr.append($td5);
-            var $td6 = $('<td>');
-            $td6.text(0).addClass('rankNames gd');
-            $tr.append($td6);
-            $tbody.append($tr);
-        })
-        $ranking.append($tbody);
-    }
-
-
-
-    var displayFixtures = function () {
-        var $fixtures = $('#fixtures');
-        fixtures = localStorage.getItem('fixtures') ? JSON.parse(localStorage.getItem('fixtures')) : [];
-        var i = 0;
-        fixtures.forEach(function (game) {
-            var $tr = $('<tr>');
-            $tr.attr('id', 'game' + i);
-            var $td1 = $('<td>');
-            $td1.text(game.player0 + ' & ' + game.player1).addClass('team1');
-            $tr.append($td1);
-            var $td2 = $('<td>');
-            $td2.text('vs').addClass('versus');
-            $tr.append($td2);
-            var $td3 = $('<td>');
-            $td3.text(game.player2 + ' & ' + game.player3).addClass('team2');
-            $tr.append($td3);
-            var $td4 = $('<td>');
-            var $form = $('<form>');
-            var $input1 = $('<input>');
-            var $input2 = $('<input>');
-            var $input3 = $('<input>');
-            $form.addClass('result');
-            $input1.attr({type: 'number', min: 0, name: 'team1Score', required: true});
-            $input2.attr({type: 'number', min: 0, name: 'team2Score', required: true});
-            $input3.attr('type', 'submit').val('ZAPISZ WYNIK');
-            $form.append($input1);
-            $form.append($input2);
-            $form.append($input3);
-            $td4.append($form);
-            $tr.append($td4);
-            $fixtures.append($tr);
-            i++;
-        })
-    }
-
-    displayFixtures();
-    showRanking(players);
-    updateResults();
-    updateRanking();
-};
-
-var updateResults = function () {
-    if (localStorage.getItem('wyniki')) {
-        wyniki = JSON.parse(localStorage.getItem('wyniki'))
-    }
-    var $resultsTable = $('#results');
-    $resultsTable.empty();
-    if (wyniki.length){
-        wyniki.forEach(function (meczyk) {
-            var $tr = $('<tr>');
-            var $td1 = $('<td>');
-            $td1.text(meczyk.team1 + " vs " + meczyk.team2);
-            $tr.append($td1);
-            var $td2 = $('<td>');
-            $td2.text(meczyk.team1Score + " : " + meczyk.team2Score);
-            $td2.addClass('score');
-            $tr.append($td2);
-            $tr.addClass('results');
-            $resultsTable.append($tr);
-        })
-    }
+var countGamesLeft = function () {
+    var gamesLeft = fixtures.length;
+    var $paragraph = $('#gamesLeft');
+    $paragraph.text('Pozostało meczyków: ' + gamesLeft);
 }
 
 launchApp();
-// createSeason();
 
 var $nextMatch;
-
 var $drawBtn = $('.drawRandomGame');
+var $fixtures = $('#fixtures tr');
 var drawNextGame = function () {
     var $fixtures = $('#fixtures tr');
     var numOfGamesLeft = $fixtures.length;
@@ -311,8 +318,6 @@ var drawNextGame = function () {
 }
 
 $nextMatch = $('.nextGame');
-
-var $fixtures = $('#fixtures tr');
 
 var submitMatchScore = function (e) {
     var saveFixturesInStorage = function () {
@@ -353,6 +358,7 @@ var submitMatchScore = function (e) {
     updateRanking();
     $row.remove();
     saveFixturesInStorage();
+    countGamesLeft();
     $('html, body').animate({
         scrollTop: 0
     }, 500);
@@ -377,6 +383,8 @@ var scrollToDrawnGame = function (e) {
         };
     });
 }
+
+
 
 $fixtures.on('submit', 'form', function (e) {
     e.preventDefault();
