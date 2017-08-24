@@ -1,6 +1,6 @@
 var wyniki = [];
 var fixtures = [];
-var players = ["@plotek", "@michal", "@grz3gorz", "@bogus", "@dyga", "@gsparzak", "@david"];
+var players = ["@plotek", "@michal", "@grz3gorz", "@dyga", "@gsparzak", "@david"];
 
 var createSeason = function () {
     var teams = [];
