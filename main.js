@@ -1,6 +1,7 @@
 let wyniki = [];
 let fixtures = [];
-const players = ["@plotek", "@dyga", "@gsparzak", "@dawid"];
+const players = ["@plotek", "@michal", "@grz3gorz", "@dyga", "@gsparzak", "@dawid", "@tomasz"];
+
 
 function createSeason() {
     console.log('start createSeason');
