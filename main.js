@@ -35,7 +35,7 @@ function createSeason() {
         }
     };
 
-    var createAllTeamCombinations = function() {
+    function createAllTeamCombinations() {
         let count = 0;
         teams.forEach(function(currTeam){
             for (var i = 0; i < teams.length; i++) {
