@@ -1,6 +1,6 @@
 let wyniki = [];
 let fixtures = [];
-let players = ["@plotek", "@michal", "@grz3gorz", "@dyga", "@gsparzak", "@dawid", "@tomasz"];
+let players = ["@plotek", "@michal", "@grz3gorz", "@dyga", "@gsparzak", "@tomasz"];
 
 
 function createSeason() {
